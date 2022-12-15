@@ -2,7 +2,7 @@
 
 module Main where
 
-import Control.Lens ((^.))
+import Control.Lens (view)
 import Data.Aeson (FromJSON)
 import GHC.Generics (Generic)
 import Network.Wreq (asJSON, get, responseBody)
@@ -18,8 +18,4 @@ data Chuck = Chuck
 instance FromJSON Chuck
 
 main :: IO ()
-main =
-  ( (asJSON =<< get "https://api.chucknorris.io/jokes/random")
-      >>= \r -> return $ r ^. responseBody
-  )
-    >>= putStrLn . value
+main = get "https://api.chucknorris.io/jokes/random" >>= asJSON >>= putStrLn . value . view responseBody
